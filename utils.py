@@ -262,7 +262,7 @@ def eval_macro(product, mappings, interpreter):
         if evaluated != normal('BALK'):
             evaluated = evaluated.children #Unwrap
 #            interpreter.set_private_mcs_product(paren([i_utils.get_mcs_product_from_macros(interpreter.private_macros + temp_intp.public_macros)])) #Now side effects take place
-            interpreter.set_private_mcs_product(i_utils.get_mcs_product_from_macros(interpreter.private_macros + temp_intp.public_macros)) #Now side effects take place
+            interpreter.set_private_mcs_product(i_utils.get_mcs_product_from_macros(temp_intp.public_macros + interpreter.private_macros)) #Now side effects take place
             interpreter.queue(temp_intp.output_queue)
             interpreter.flush_output()
             return True, evaluated
