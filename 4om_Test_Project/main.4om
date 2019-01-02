@@ -2,14 +2,13 @@
 set-prv-mcs {{
             (def-prv 
                 (def-prv ~n ~f ~p) 
-                ({set-prv-mcs 
+                ({set-pub-mcs 
                     {{
                         (~n ~f ~p)
-                        [unw [unw [mcs]]]
                     }}
                 })
             )
-            [unw [unw [mcs]]]
+            [unw [unw [prv-mcs]]]
         }}
         
 def-prv def-pub

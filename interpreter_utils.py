@@ -37,25 +37,45 @@ def get_parsed(line):
         result = [utils.parse(token) for token in tokens]
         return result
 
-def get_mcs_macro(product):
+def get_mcs_product_from_macros(macros):
+    """
+    Return a macro space macro product from the given list of macros.
+    
+    Parameters:
+        macros: The macro list to return a macro product made from.
+    """
+#        print('get_mcs_macro:')
+#        print(product)
+#        print('end get_mcs_macro')
+#    return utils.paren([utils.paren([utils.paren(macros)])])
+    return utils.paren([utils.paren([utils.paren(macros)])])
+
+def get_mcs_macro(product, name):
         """
         Return a macro space macro from the given mcs product.
         
         Parameters:
-            product: The mcs product to return a macro made from.
-        """
-        return utils.bracket(PAREN, children=[utils.normal('mcs'),
-                                              utils.bracket(PAREN, [utils.normal('mcs')]),
-                                              utils.bracket(PAREN, #Do need both unwraps
-                                                            [utils.bracket(PAREN, 
-                                                                           [product])])])
+            product: The mcs product to return a macro made from. With triple parens (one because it'll be unwrapped, to to end up in the result).
+#        """
+#        print('get_mcs_macro:')
+#        print(product)
+#        print('end get_mcs_macro')
+        return utils.paren([utils.normal(name),
+                            utils.paren([utils.normal(name)]),
+                            utils.paren([product])])
 
-def sort_macros(mcs_product, macros):
+def sort_macros(mcs_product, mcs_names, macros):
     #mcs always counts as the last macro
-    name_indices = {utils.parse('mcs'):len(macros)}
+#    print('sorting')
+#    print(mcs_product)
+    name_indices = {}
+    i = 0
+    for mcs_name in mcs_names:
+        name_indices[utils.parse(mcs_name)] = len(macros)+i
+        i += 1
         
-    for i in range(0, len(mcs_product.children[0].children)):
-        node = mcs_product.children[0].children[i]
+    for i in range(0, len(mcs_product.children[0].children[0].children)):
+        node = mcs_product.children[0].children[0].children[i]
         if is_macro(node):
             name_indices[utils.get_name(node)] = i
     

@@ -110,7 +110,8 @@ def head_macro():
 ###############################################################################
 def set_super_mcs_product(mappings, interpreter):
     new_mcs = get(mappings, 'a')
-    interpreter.set_super_mcs_product(new_mcs)
+    interpreter.set_super_mcs_product(utils.paren([new_mcs]))
+#    interpreter.set_super_mcs_product(utils.paren([utils.paren(new_mcs)]))
     return True, []
 
 def set_super_mcs_macro():
@@ -118,21 +119,26 @@ def set_super_mcs_macro():
 ###############################################################################
 def set_public_mcs_product(mappings, interpreter):
     new_mcs = get(mappings, 'a')
-    interpreter.set_public_mcs_product(new_mcs)
+    interpreter.set_public_mcs_product(utils.paren([new_mcs]))
+#    interpreter.set_public_mcs_product(utils.paren([utils.paren(new_mcs)]))
     return True, []
 
 def set_public_mcs_macro():
     return get_func_macro('set-pub-mcs', '(set-pub-mcs ~a)', set_public_mcs_product, 'set_public_mcs_product')
 ###############################################################################
 def set_private_mcs_product(mappings, interpreter):
+    print('set_private_mcs_product macro')
     new_mcs = get(mappings, 'a')
-    interpreter.set_private_mcs_product(new_mcs)
+#    print('new_mcs:')
+#    print(new_mcs)
+    interpreter.set_private_mcs_product(utils.paren([new_mcs]))
     return True, []
 
 def set_private_mcs_macro():
     return get_func_macro('set-prv-mcs', '(set-prv-mcs ~a)', set_private_mcs_product, 'set_private_mcs_product')
 ###############################################################################
 def get_builtin_macros():
+    """Return a list containing the built-in macros."""
     macros = [ind_macro(),
               loc_macro(),
               cntr_macro(),
@@ -156,4 +162,4 @@ def get_builtin_macros():
               get_binary_macro('<=', lambda a, b: float(a.val) <= float(b.val)),
               get_binary_macro('f-eq', lambda a, b: float(a.val) == float(b.val)),
               get_binary_macro('f-neq', lambda a, b: float(a.val) != float(b.val))]
-    return utils.paren([utils.bracket(PAREN, macros)])
+    return macros

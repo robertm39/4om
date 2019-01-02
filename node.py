@@ -33,13 +33,19 @@ class Node:
     def __call__(self, mappings, interpreter):
         return self.func(mappings, interpreter)
     
-    def __str__(self, depth=0):
+    def __str__(self):
         id_part = '::' + str(self.id) if self.id != 0 else ''
         result = '(' + str(self.node_type)[9:] + '::' + str(self.val) + id_part + ')'
 #        result = result[0] + result[1:-1].strip() + result[-1] #Get rid of internal edge whitespace
-        result = '\t' * depth + result + '\n'
+#        result = '\t' * depth + result + '\n'
+        result += '\n'
         for child in self.children:
-            result += child.__str__(depth=depth+1)
+            c_result = child.__str__()
+            for line in c_result.split('\n'):
+                if line:
+                    result += '\t' + line
+                    if not line[-1] == '\n':
+                        result += '\n'
         
         return result
     

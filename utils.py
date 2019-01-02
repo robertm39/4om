@@ -255,12 +255,14 @@ def eval_macro(product, mappings, interpreter):
     if product[0].node_type != NodeType.FUNC: #A normal macro
         prod_result = fill_in_form(product, mappings)
         #The inner interpreter has the super, public and private macro spaces as its super macro space
-        temp_intp = intp.Interpreter(i_utils.get_mcs_product(interpreter._macros)) #No side effects if BALK
+        sup_mcs_product = i_utils.get_mcs_product_from_macros(interpreter._macros)
+        temp_intp = intp.Interpreter(sup_mcs_product) #No side effects if BALK
         evaluated = temp_intp.interpret_nodes(prod_result)[0] #The first should be either BALK or a PAREN
             
         if evaluated != normal('BALK'):
             evaluated = evaluated.children #Unwrap
-            interpreter.set_private_mcs_product(i_utils.get_mcs_product(interpreter.private_macros + temp_intp.public_macros)) #Now side effects take place
+#            interpreter.set_private_mcs_product(paren([i_utils.get_mcs_product_from_macros(interpreter.private_macros + temp_intp.public_macros)])) #Now side effects take place
+            interpreter.set_private_mcs_product(i_utils.get_mcs_product_from_macros(interpreter.private_macros + temp_intp.public_macros)) #Now side effects take place
             interpreter.queue(temp_intp.output_queue)
             interpreter.flush_output()
             return True, evaluated
